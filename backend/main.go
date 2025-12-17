@@ -12,7 +12,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func getSelectedAll(dbpool *pgxpool.Pool) gin.HandlerFunc {
+func executeQuery(dbpool *pgxpool.Pool) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		raw, err := io.ReadAll(c.Request.Body)
 		if err != nil {
@@ -91,6 +91,6 @@ func main() {
 
 	//gin's part
 	router := gin.Default()
-	router.GET("/query", getSelectedAll(dbpool))
+	router.GET("/query", executeQuery(dbpool))
 	router.Run("localhost:" + port)
 }
