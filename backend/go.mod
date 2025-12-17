@@ -1,8 +1,9 @@
-module backend
+module wardrobe
 
 go 1.25.5
 
 require (
+	github.com/Egot3/Wardrobe v0.0.0-20251217181738-8262141d7866 // indirect
 	github.com/bytedance/sonic v1.14.0 // indirect
 	github.com/bytedance/sonic/loader v0.3.0 // indirect
 	github.com/cloudwego/base64x v0.1.6 // indirect
