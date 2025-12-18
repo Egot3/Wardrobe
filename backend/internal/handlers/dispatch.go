@@ -11,7 +11,7 @@ import (
 func Dispatcher(dbpool *pgxpool.Pool) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		raw, _ := c.GetRawData()
-		userInput := strings.TrimSpace(string(raw))
+		userInput := strings.TrimRight(strings.TrimSpace(string(raw)), ";")
 
 		if userInput == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "No query"})
@@ -23,13 +23,20 @@ func Dispatcher(dbpool *pgxpool.Pool) gin.HandlerFunc {
 
 		switch command {
 		case "SELECT":
-			data, err := GetSelectedAll(dbpool, string(raw))
+			data, err := GetSelectedAll(dbpool, userInput)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 				return
 			}
 
 			c.JSON(http.StatusOK, gin.H{"success": true, "data": data})
+		case "ADD":
+			err := AddData(dbpool, parced)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			c.Status(http.StatusNoContent)
 		}
 	}
 }
